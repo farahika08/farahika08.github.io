@@ -265,16 +265,28 @@
             background: #111;
         }
 
-        /* Hide video until loaded, show poster */
-        .phone-screen .autoplay-video {
-            opacity: 0;
+        /* Poster sits on top until video starts, then hides */
+        .phone-screen .video-poster {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
             transition: opacity 0.3s ease;
         }
-        .phone-item.playing .phone-screen .autoplay-video {
-            opacity: 1;
+        .phone-screen .autoplay-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
         }
+        /* Once playing class added, hide the poster so video shows */
         .phone-item.playing .phone-screen .video-poster {
             opacity: 0;
+            pointer-events: none;
         }
 
         .phone-poster,
@@ -906,9 +918,18 @@
             if (!video.src || video.src === window.location.href) {
                 video.src = videoSrc;
             }
+            video.muted = false; // start with sound on
             return video.play().then(() => {
                 item.classList.add("playing");
-            }).catch(() => item.classList.remove("playing"));
+                if (unmuteBtn) unmuteBtn.innerHTML = '<i class="fas fa-volume-high"></i>';
+            }).catch(() => {
+                // Browser blocked unmuted autoplay — fallback to muted
+                video.muted = true;
+                return video.play().then(() => {
+                    item.classList.add("playing");
+                    if (unmuteBtn) unmuteBtn.innerHTML = '<i class="fas fa-volume-xmark"></i>';
+                }).catch(() => {});
+            });
         }
 
         /* Click card to play/pause */
@@ -920,10 +941,11 @@
                 video.play().then(() => item.classList.add("playing")).catch(() => {});
             } else {
                 video.pause();
-                item.classList.remove("playing");
+                // Keep "playing" class so poster stays hidden — just show play button
             }
         });
 
+        /* Only toggle play button, never remove playing class after first play */
         video.addEventListener("play",  () => { if (playBtn) playBtn.style.opacity = "0"; });
         video.addEventListener("pause", () => { if (playBtn) playBtn.style.opacity = "1"; });
 
@@ -961,7 +983,7 @@
                     .catch(() => item.classList.remove("playing"));
             } else if (!entry.isIntersecting) {
                 video.pause();
-                item.classList.remove("playing");
+                // Keep playing class so poster stays hidden when paused out of view
             }
         });
     }, { threshold: 0.4 });
