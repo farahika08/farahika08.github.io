@@ -214,7 +214,7 @@
         .video-thumb {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 ratio */
+            padding-top: 65%; /* wider landscape ratio */
             background: #1a1a1a;
             overflow: hidden;
         }
@@ -279,6 +279,36 @@
         .video-card:hover .play-btn {
             transform: translate(-50%, -50%) scale(1.08);
             background: #fff;
+        }
+
+        /* Unmute button */
+        .unmute-btn {
+            position: absolute;
+            bottom: 0.6rem;
+            right: 0.6rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.55);
+            border: none;
+            color: #fff;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3;
+            transition: background 0.2s, transform 0.2s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .video-card.playing .unmute-btn {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .unmute-btn:hover {
+            background: rgba(0,0,0,0.8);
+            transform: scale(1.1);
         }
 
         /* Platform badge */
@@ -656,6 +686,7 @@
                     <img class="video-poster" src="assets/images/video-thumb-1.jpg" alt="Video 1 thumbnail">
                     <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
                     <div class="play-btn"><i class="fas fa-play"></i></div>
+                    <button class="unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                 </div>
                 <div class="video-info">
                     <h4>Video Title 1</h4>
@@ -830,26 +861,32 @@
 
     videoCards.forEach(card => revealObserver.observe(card));
 
-    /* ── Click to play / pause ── */
+    /* ── Per-card video logic ── */
     videoCards.forEach(card => {
         const videoSrc = card.dataset.video;
-        if (!videoSrc) return; // skip thumbnail-only cards
+        if (!videoSrc) return;
 
         const video = card.querySelector(".autoplay-video");
         const poster = card.querySelector(".video-poster");
         const playBtn = card.querySelector(".play-btn");
+        const unmuteBtn = card.querySelector(".unmute-btn");
 
-        card.addEventListener("click", () => {
-            if (video.style.display === "none") {
-                // First click: load and show video
+        function loadAndPlay() {
+            if (!video.src || video.src === window.location.href) {
                 video.src = videoSrc;
-                video.style.display = "block";
-                if (poster) poster.style.display = "none";
-                video.play().then(() => {
-                    card.classList.add("playing");
-                }).catch(err => {
-                    console.log("Play failed:", err);
-                });
+            }
+            video.style.display = "block";
+            if (poster) poster.style.display = "none";
+            video.play().then(() => {
+                card.classList.add("playing");
+            }).catch(err => console.log("Play blocked:", err));
+        }
+
+        /* Click card to play/pause */
+        card.addEventListener("click", (e) => {
+            if (unmuteBtn && unmuteBtn.contains(e.target)) return;
+            if (video.style.display === "none" || !video.src || video.src === window.location.href) {
+                loadAndPlay();
             } else if (video.paused) {
                 video.play();
                 card.classList.add("playing");
@@ -859,25 +896,47 @@
             }
         });
 
-        // Show/hide play button based on state
-        video.addEventListener("play", () => {
-            playBtn.style.opacity = "0";
-        });
-        video.addEventListener("pause", () => {
-            playBtn.style.opacity = "1";
-        });
+        /* Show/hide play button */
+        video.addEventListener("play", () => { playBtn.style.opacity = "0"; });
+        video.addEventListener("pause", () => { playBtn.style.opacity = "1"; });
+
+        /* Unmute button toggle */
+        if (unmuteBtn) {
+            unmuteBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                video.muted = !video.muted;
+                unmuteBtn.innerHTML = video.muted
+                    ? '<i class="fas fa-volume-xmark"></i>'
+                    : '<i class="fas fa-volume-high"></i>';
+            });
+        }
     });
 
-    /* ── Scroll autoplay: play when 50% in view, pause when out ── */
+    /* ── Autoplay when scrolled into view (after first interaction) ── */
+    let userInteracted = false;
+    document.addEventListener("scroll", () => { userInteracted = true; }, { once: true });
+    document.addEventListener("click",  () => { userInteracted = true; }, { once: true });
+    document.addEventListener("touchstart", () => { userInteracted = true; }, { once: true });
+
     const playObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             const card = entry.target;
-            const video = card.querySelector(".autoplay-video");
-            if (!video || video.style.display === "none") return;
+            const videoSrc = card.dataset.video;
+            if (!videoSrc) return;
 
-            if (entry.isIntersecting) {
-                video.play().then(() => card.classList.add("playing")).catch(() => {});
-            } else {
+            const video = card.querySelector(".autoplay-video");
+            const poster = card.querySelector(".video-poster");
+
+            if (entry.isIntersecting && userInteracted) {
+                if (!video.src || video.src === window.location.href) {
+                    video.src = videoSrc;
+                }
+                video.style.display = "block";
+                if (poster) poster.style.display = "none";
+                video.play().then(() => {
+                    card.classList.add("playing");
+                }).catch(() => {});
+            } else if (!entry.isIntersecting) {
                 video.pause();
                 card.classList.remove("playing");
             }
