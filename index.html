@@ -167,6 +167,158 @@
             opacity: 0.6;
             font-style: italic;
         }
+
+        /* ── Video Showcase Section ── */
+        .video-section-intro {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.75;
+            font-size: 0.97rem;
+            line-height: 1.7;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+            .video-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll-reveal animation */
+        .video-card {
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.32s ease, box-shadow 0.32s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.32s ease;
+        }
+        .video-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+        }
+
+        /* Thumbnail wrapper with play button overlay */
+        .video-thumb {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 ratio */
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+        .video-thumb img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+        .video-card:hover .video-thumb img {
+            transform: scale(1.05);
+            opacity: 0.85;
+        }
+
+        /* Dark gradient over thumbnail */
+        .video-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 60%);
+            pointer-events: none;
+        }
+
+        /* Play button */
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+        .play-btn i {
+            color: var(--accent-color, #c9a96e);
+            font-size: 1.1rem;
+            margin-left: 3px; /* optical center for play icon */
+        }
+        .video-card:hover .play-btn {
+            transform: translate(-50%, -50%) scale(1.08);
+            background: #fff;
+        }
+
+        /* Platform badge */
+        .platform-badge {
+            position: absolute;
+            top: 0.6rem;
+            left: 0.6rem;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        /* Card info below thumbnail */
+        .video-info {
+            padding: 0.85rem 1rem 1rem;
+        }
+        .video-info h4 {
+            margin: 0 0 0.3rem;
+            font-size: 0.93rem;
+            line-height: 1.4;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        .video-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.55;
+        }
+
+        /* "View all" link */
+        .video-cta {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+        .video-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--accent-color, #c9a96e);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .video-cta a:hover {
+            border-color: var(--accent-color, #c9a96e);
+        }
     </style>
 </head>
 <body>
@@ -194,6 +346,7 @@
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#videos">Videos</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </div>
@@ -204,7 +357,7 @@
     <div class="container">
         <h2>About Me</h2>
         <div class="about-content">
-            <img src="assets/images/profileme.jpg" alt="Farah Zulaikha" class="profile-photo">
+            <img src="assets/images/profile-placeholder.jpg" alt="Farah Zulaikha" class="profile-photo">
             <div class="about-text">
                 <p>I'm an Information Systems Management graduate from Universiti Teknologi MARA (UiTM) with hands-on experience in IT service desk operations, web development, and digital content creation. I enjoy building practical tech solutions and creating visual content that communicates clearly and effectively.</p>
                 <p>During my internship at Aidea.com Technology, I managed end-to-end IT support workflows, designed promotional graphics, and handled e-commerce operations. I also run a freelance affiliate marketing presence on TikTok and Shopee, where I ranked in the Top 5 Content Creators for the SKIN1004 October 2025 Upload Mission. This portfolio highlights the projects and experiences that have shaped my journey so far.</p>
@@ -433,31 +586,181 @@
             </div>
         </div>
 
-      <!-- Certificates -->
-<h2 style="margin-top: 2.5rem;">Certificates</h2>
-<div class="certs-grid">
-    <div class="cert-card" style="flex-direction: column; padding: 0; overflow: hidden;">
-        <img src="assets/images/cert1.jpg" alt="Power BI Certificate" style="width: 100%; height: 160px; object-fit: cover;">
-        <div style="padding: 1rem 1.25rem;">
-            <h4>Introduction to Microsoft Power BI Data Analyst</h4>
-            <p>National Training Week (NTW) Online Training · Jun 2025</p>
+        <!-- Certificates -->
+        <h2 style="margin-top: 2.5rem;">Certificates</h2>
+        <div class="certs-grid">
+            <div class="cert-card">
+                <i class="fas fa-certificate"></i>
+                <div>
+                    <h4>Introduction to Microsoft Power BI Data Analyst</h4>
+                    <p>National Training Week (NTW) Online Training · Jun 2025</p>
+                </div>
+            </div>
+            <div class="cert-card">
+                <i class="fas fa-certificate"></i>
+                <div>
+                    <h4>Intermediate Python</h4>
+                    <p>DataCamp · Feb 2026</p>
+                </div>
+            </div>
+            <div class="cert-card">
+                <i class="fas fa-certificate"></i>
+                <div>
+                    <h4>Intermediate SQL</h4>
+                    <p>DataCamp · Jun 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities -->
+        <h2 style="margin-top: 2.5rem;">Activities</h2>
+        <div class="activity-item">
+            <h3>SULAM Community Outreach Programme</h3>
+            <div class="role">Multimedia Bureau &amp; Facilitator · Jan 2023</div>
+            <p style="margin:0.4rem 0 0; font-size:0.9rem; opacity:0.8;">Designed video montages and visual content to document programme activities. Managed technical equipment setup during sessions.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- VIDEO SHOWCASE SECTION -->
+<section id="videos" class="section">
+    <div class="container">
+        <h2>Affiliate Video Showcase</h2>
+        <p class="video-section-intro">
+            A collection of my short-form affiliate content created for TikTok and Shopee.
+            Each video is crafted to drive engagement and authentic product discovery.
+        </p>
+
+        <div class="video-grid">
+
+            <!-- Video 1 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_1_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-1.jpg" alt="Video 1 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 1</h4>
+                    <p>Skincare · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_2_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-2.jpg" alt="Video 2 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 2</h4>
+                    <p>Skincare · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_3_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-3.jpg" alt="Video 3 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 3</h4>
+                    <p>Skincare · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_4_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">Shopee</span>
+                    <img src="assets/images/video-thumb-4.jpg" alt="Video 4 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 4</h4>
+                    <p>Beauty · Shopee</p>
+                </div>
+            </div>
+
+            <!-- Video 5 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_5_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-5.jpg" alt="Video 5 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 5</h4>
+                    <p>Lifestyle · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 6 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_6_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">Shopee</span>
+                    <img src="assets/images/video-thumb-6.jpg" alt="Video 6 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 6</h4>
+                    <p>Beauty · Shopee</p>
+                </div>
+            </div>
+
+            <!-- Video 7 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_7_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-7.jpg" alt="Video 7 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 7</h4>
+                    <p>Skincare · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 8 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_8_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <img src="assets/images/video-thumb-8.jpg" alt="Video 8 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 8</h4>
+                    <p>Lifestyle · TikTok</p>
+                </div>
+            </div>
+
+            <!-- Video 9 -->
+            <div class="video-card" onclick="window.open('[YOUR_VIDEO_9_URL]','_blank')">
+                <div class="video-thumb">
+                    <span class="platform-badge">Shopee</span>
+                    <img src="assets/images/video-thumb-9.jpg" alt="Video 9 thumbnail">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 9</h4>
+                    <p>Beauty · Shopee</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- View all CTA -->
+        <div class="video-cta">
+            <a href="[YOUR_TIKTOK_PROFILE_URL]" target="_blank">
+                View all videos on TikTok <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </div>
-    <div class="cert-card" style="flex-direction: column; padding: 0; overflow: hidden;">
-        <img src="assets/images/cert2.jpg" alt="Python Certificate" style="width: 100%; height: 160px; object-fit: cover;">
-        <div style="padding: 1rem 1.25rem;">
-            <h4>Intermediate Python</h4>
-            <p>DataCamp · Feb 2026</p>
-        </div>
-    </div>
-    <div class="cert-card" style="flex-direction: column; padding: 0; overflow: hidden;">
-        <img src="assets/images/cert3.jpg" alt="SQL Certificate" style="width: 100%; height: 160px; object-fit: cover;">
-        <div style="padding: 1rem 1.25rem;">
-            <h4>Intermediate SQL</h4>
-            <p>DataCamp · Jun 2026</p>
-        </div>
-    </div>
-</div>
+</section>
 
 <!-- CONTACT SECTION -->
 <section id="contact" class="section">
@@ -494,6 +797,26 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+
+<script>
+    /* ── Scroll-reveal for video cards ── */
+    const videoCards = document.querySelectorAll(".video-card");
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const index = Array.from(videoCards).indexOf(entry.target);
+                const delay = (index % 3) * 100;
+                setTimeout(() => {
+                    entry.target.classList.add("visible");
+                }, delay);
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    videoCards.forEach(card => revealObserver.observe(card));
+</script>
 
 </body>
 </html>
