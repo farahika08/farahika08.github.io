@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,7 +169,7 @@
             font-style: italic;
         }
 
-        /* ── Video Showcase Section ── */
+        /* ── Phone Mockup Video Section ── */
         .video-section-intro {
             text-align: center;
             max-width: 600px;
@@ -177,174 +178,158 @@
             font-size: 0.97rem;
             line-height: 1.7;
         }
-        .video-grid {
+
+        .phone-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 2.5rem 2rem;
         }
-        @media (max-width: 900px) {
-            .video-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 560px) {
-            .video-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .phone-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .phone-grid { grid-template-columns: 1fr; } }
 
-        /* Scroll-reveal animation */
-        .video-card {
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fff;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            transition: transform 0.32s ease, box-shadow 0.32s ease;
-            cursor: pointer;
+        /* Scroll-reveal */
+        .reveal-item {
             opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.32s ease;
+            transform: translateY(30px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
         }
-        .video-card.visible {
+        .reveal-item.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+
+        /* Label above phone */
+        .phone-label-top {
+            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+        .phone-brand {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--heading-color, #1a1a2e);
+            letter-spacing: 0.02em;
+        }
+        .phone-type {
+            display: block;
+            font-size: 0.82rem;
+            opacity: 0.55;
+            margin-top: 0.15rem;
         }
 
-        /* Thumbnail wrapper with play button overlay */
-        .video-thumb {
+        /* Phone outer frame */
+        .phone-frame {
             position: relative;
             width: 100%;
-            padding-top: 65%; /* wider landscape ratio */
-            background: #1a1a1a;
-            overflow: hidden;
+            max-width: 220px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 36px;
+            padding: 12px 10px;
+            box-shadow:
+                0 0 0 2px #e0e0e0,
+                0 8px 30px rgba(0,0,0,0.13),
+                inset 0 0 0 1px rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .video-thumb img,
-        .video-thumb video {
+        .phone-frame:hover {
+            transform: translateY(-6px);
+            box-shadow:
+                0 0 0 2px #d0d0d0,
+                0 16px 40px rgba(0,0,0,0.18),
+                inset 0 0 0 1px rgba(255,255,255,0.8);
+        }
+
+        /* Notch at top */
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            z-index: 5;
+        }
+
+        /* Screen inside phone */
+        .phone-screen {
+            position: relative;
+            width: 100%;
+            padding-top: 177%; /* 9:16 portrait ratio */
+            border-radius: 26px;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .phone-poster,
+        .phone-video {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease, opacity 0.3s ease;
-        }
-        .video-card:hover .video-thumb img,
-        .video-card:hover .video-thumb video {
-            transform: scale(1.05);
-            opacity: 0.85;
-        }
-        /* Hide play button once video is playing */
-        .video-card.playing .play-btn {
-            opacity: 0;
-            pointer-events: none;
-        }
-        /* Prevent black flash before video loads */
-        .video-thumb video {
-            background: #111;
-        }
-        /* Keep play button visible until playing */
-        .video-card:not(.playing) .play-btn {
-            opacity: 1;
-        }
-
-        /* Dark gradient over thumbnail */
-        .video-thumb::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 60%);
-            pointer-events: none;
+            border-radius: 26px;
         }
 
         /* Play button */
-        .play-btn {
+        .phone-play {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 52px;
-            height: 52px;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255,255,255,0.9);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2;
-            transition: transform 0.25s ease, background 0.25s ease;
+            z-index: 3;
+            transition: opacity 0.2s, transform 0.2s;
         }
-        .play-btn i {
+        .phone-play i {
             color: var(--accent-color, #c9a96e);
-            font-size: 1.1rem;
-            margin-left: 3px; /* optical center for play icon */
+            font-size: 1rem;
+            margin-left: 3px;
         }
-        .video-card:hover .play-btn {
-            transform: translate(-50%, -50%) scale(1.08);
-            background: #fff;
+        .phone-item.playing .phone-play {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Unmute button */
-        .unmute-btn {
+        .phone-unmute {
             position: absolute;
             bottom: 0.6rem;
             right: 0.6rem;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.55);
+            background: rgba(0,0,0,0.5);
             border: none;
             color: #fff;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 3;
-            transition: background 0.2s, transform 0.2s;
+            z-index: 4;
             opacity: 0;
             pointer-events: none;
+            transition: opacity 0.2s, background 0.2s;
         }
-        .video-card.playing .unmute-btn {
+        .phone-item.playing .phone-unmute {
             opacity: 1;
             pointer-events: all;
         }
-        .unmute-btn:hover {
-            background: rgba(0,0,0,0.8);
-            transform: scale(1.1);
-        }
+        .phone-unmute:hover { background: rgba(0,0,0,0.75); }
 
-        /* Platform badge */
-        .platform-badge {
-            position: absolute;
-            top: 0.6rem;
-            left: 0.6rem;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding: 0.2rem 0.55rem;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
-        /* Card info below thumbnail */
-        .video-info {
-            padding: 0.85rem 1rem 1rem;
-        }
-        .video-info h4 {
-            margin: 0 0 0.3rem;
-            font-size: 0.93rem;
-            line-height: 1.4;
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-        }
-        .video-info p {
-            margin: 0;
-            font-size: 0.8rem;
-            opacity: 0.55;
-        }
-
-        /* "View all" link */
+        /* View all CTA */
         .video-cta {
             text-align: center;
             margin-top: 2.5rem;
@@ -361,9 +346,8 @@
             border-bottom: 2px solid transparent;
             transition: border-color 0.2s;
         }
-        .video-cta a:hover {
-            border-color: var(--accent-color, #c9a96e);
-        }
+        .video-cta a:hover { border-color: var(--accent-color, #c9a96e); }
+
     </style>
 </head>
 <body>
@@ -677,130 +661,163 @@
             Each video is crafted to drive engagement and authentic product discovery.
         </p>
 
-        <div class="video-grid">
+        <div class="phone-grid">
 
-            <!-- Video 1 -->
-            <div class="video-card" data-video="assets/videos/video1.mp4">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img class="video-poster" src="assets/images/video-thumb-1.jpg" alt="Video 1 thumbnail">
-                    <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                    <button class="unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+            <!-- Phone 1 -->
+            <div class="phone-item reveal-item" data-video="assets/videos/video1.mp4">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 1</span>
+                    <span class="phone-type">Skincare</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 1</h4>
-                    <p>Skincare · TikTok</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-1.jpg" alt="Video 1">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Video 2 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_2_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img src="assets/images/video-thumb-2.jpg" alt="Video 2 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
+            <!-- Phone 2 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_2_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 2</span>
+                    <span class="phone-type">Skincare</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 2</h4>
-                    <p>Skincare · TikTok</p>
-                </div>
-            </div>
-
-            <!-- Video 3 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_3_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img src="assets/images/video-thumb-3.jpg" alt="Video 3 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="video-info">
-                    <h4>Video Title 3</h4>
-                    <p>Skincare · TikTok</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-2.jpg" alt="Video 2">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Video 4 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_4_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">Shopee</span>
-                    <img src="assets/images/video-thumb-4.jpg" alt="Video 4 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
+            <!-- Phone 3 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_3_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 3</span>
+                    <span class="phone-type">Beauty</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 4</h4>
-                    <p>Beauty · Shopee</p>
-                </div>
-            </div>
-
-            <!-- Video 5 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_5_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img src="assets/images/video-thumb-5.jpg" alt="Video 5 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="video-info">
-                    <h4>Video Title 5</h4>
-                    <p>Lifestyle · TikTok</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-3.jpg" alt="Video 3">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Video 6 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_6_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">Shopee</span>
-                    <img src="assets/images/video-thumb-6.jpg" alt="Video 6 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
+            <!-- Phone 4 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_4_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 4</span>
+                    <span class="phone-type">Lifestyle</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 6</h4>
-                    <p>Beauty · Shopee</p>
-                </div>
-            </div>
-
-            <!-- Video 7 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_7_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img src="assets/images/video-thumb-7.jpg" alt="Video 7 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="video-info">
-                    <h4>Video Title 7</h4>
-                    <p>Skincare · TikTok</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-4.jpg" alt="Video 4">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">Shopee</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Video 8 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_8_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">TikTok</span>
-                    <img src="assets/images/video-thumb-8.jpg" alt="Video 8 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
+            <!-- Phone 5 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_5_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 5</span>
+                    <span class="phone-type">Beauty</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 8</h4>
-                    <p>Lifestyle · TikTok</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-5.jpg" alt="Video 5">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Video 9 -->
-            <div class="video-card" onclick="window.open('[YOUR_VIDEO_9_URL]','_blank')">
-                <div class="video-thumb">
-                    <span class="platform-badge">Shopee</span>
-                    <img src="assets/images/video-thumb-9.jpg" alt="Video 9 thumbnail">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
+            <!-- Phone 6 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_6_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 6</span>
+                    <span class="phone-type">Skincare</span>
                 </div>
-                <div class="video-info">
-                    <h4>Video Title 9</h4>
-                    <p>Beauty · Shopee</p>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-6.jpg" alt="Video 6">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">Shopee</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone 7 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_7_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 7</span>
+                    <span class="phone-type">Lifestyle</span>
+                </div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-7.jpg" alt="Video 7">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone 8 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_8_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 8</span>
+                    <span class="phone-type">Beauty</span>
+                </div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-8.jpg" alt="Video 8">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">TikTok</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone 9 -->
+            <div class="phone-item reveal-item" data-video="[YOUR_VIDEO_9_URL]">
+                <div class="phone-label-top">
+                    <span class="phone-brand">Video Title 9</span>
+                    <span class="phone-type">Skincare</span>
+                </div>
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <img class="video-poster" src="assets/images/video-thumb-9.jpg" alt="Video 9">
+                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <div class="phone-play-btn"><i class="fas fa-play"></i></div>
+                        <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
+                        <span class="phone-badge">Shopee</span>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- View all CTA -->
         <div class="video-cta">
             <a href="[YOUR_TIKTOK_PROFILE_URL]" target="_blank">
                 View all videos on TikTok <i class="fas fa-arrow-right"></i>
@@ -846,61 +863,58 @@
 <script src="assets/js/main.js"></script>
 
 <script>
-    const videoCards = document.querySelectorAll(".video-card");
+    const phoneItems = document.querySelectorAll(".phone-item");
 
-    /* ── Scroll-reveal ── */
+    /* ── 1. Scroll-reveal: staggered fade-in ── */
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                const index = Array.from(videoCards).indexOf(entry.target);
-                setTimeout(() => entry.target.classList.add("visible"), (index % 3) * 100);
+                const index = Array.from(phoneItems).indexOf(entry.target);
+                setTimeout(() => entry.target.classList.add("visible"), (index % 3) * 120);
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1 });
+    phoneItems.forEach(item => revealObserver.observe(item));
 
-    videoCards.forEach(card => revealObserver.observe(card));
+    /* ── 2. Per-item video logic ── */
+    phoneItems.forEach(item => {
+        const videoSrc = item.dataset.video;
+        if (!videoSrc || videoSrc.startsWith('[')) return;
 
-    /* ── Per-card video logic ── */
-    videoCards.forEach(card => {
-        const videoSrc = card.dataset.video;
-        if (!videoSrc) return;
+        const video    = item.querySelector(".autoplay-video");
+        const poster   = item.querySelector(".video-poster");
+        const playBtn  = item.querySelector(".phone-play-btn");
+        const unmuteBtn = item.querySelector(".phone-unmute-btn");
 
-        const video = card.querySelector(".autoplay-video");
-        const poster = card.querySelector(".video-poster");
-        const playBtn = card.querySelector(".play-btn");
-        const unmuteBtn = card.querySelector(".unmute-btn");
+        if (!video) return;
 
         function loadAndPlay() {
-            if (!video.src || video.src === window.location.href) {
-                video.src = videoSrc;
-            }
+            if (!video.src || video.src === window.location.href) video.src = videoSrc;
             video.style.display = "block";
             if (poster) poster.style.display = "none";
-            video.play().then(() => {
-                card.classList.add("playing");
-            }).catch(err => console.log("Play blocked:", err));
+            return video.play().then(() => {
+                item.classList.add("playing");
+            }).catch(() => item.classList.remove("playing"));
         }
 
-        /* Click card to play/pause */
-        card.addEventListener("click", (e) => {
+        /* Click anywhere on card to play/pause */
+        item.addEventListener("click", (e) => {
             if (unmuteBtn && unmuteBtn.contains(e.target)) return;
-            if (video.style.display === "none" || !video.src || video.src === window.location.href) {
+            if (!video.src || video.src === window.location.href || video.style.display === "none") {
                 loadAndPlay();
             } else if (video.paused) {
-                video.play();
-                card.classList.add("playing");
+                video.play().then(() => item.classList.add("playing")).catch(() => {});
             } else {
                 video.pause();
-                card.classList.remove("playing");
+                item.classList.remove("playing");
             }
         });
 
-        /* Show/hide play button */
-        video.addEventListener("play", () => { playBtn.style.opacity = "0"; });
-        video.addEventListener("pause", () => { playBtn.style.opacity = "1"; });
+        video.addEventListener("play",  () => { if (playBtn) playBtn.style.opacity = "0"; });
+        video.addEventListener("pause", () => { if (playBtn) playBtn.style.opacity = "1"; });
 
-        /* Unmute button toggle */
+        /* Sound toggle */
         if (unmuteBtn) {
             unmuteBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
@@ -912,39 +926,41 @@
         }
     });
 
-    /* ── Autoplay when scrolled into view (after first interaction) ── */
-    let userInteracted = false;
-    document.addEventListener("scroll", () => { userInteracted = true; }, { once: true });
-    document.addEventListener("click",  () => { userInteracted = true; }, { once: true });
-    document.addEventListener("touchstart", () => { userInteracted = true; }, { once: true });
+    /* ── 3. Auto-play when scrolled into view after first interaction ── */
+    let interacted = false;
+    ["scroll","click","touchstart"].forEach(evt =>
+        document.addEventListener(evt, () => { interacted = true; }, { once: true, passive: true })
+    );
 
     const playObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            const card = entry.target;
-            const videoSrc = card.dataset.video;
-            if (!videoSrc) return;
+            const item = entry.target;
+            const videoSrc = item.dataset.video;
+            if (!videoSrc || videoSrc.startsWith('[')) return;
 
-            const video = card.querySelector(".autoplay-video");
-            const poster = card.querySelector(".video-poster");
+            const video  = item.querySelector(".autoplay-video");
+            const poster = item.querySelector(".video-poster");
+            if (!video) return;
 
-            if (entry.isIntersecting && userInteracted) {
-                if (!video.src || video.src === window.location.href) {
-                    video.src = videoSrc;
-                }
+            if (entry.isIntersecting && interacted) {
+                if (!video.src || video.src === window.location.href) video.src = videoSrc;
                 video.style.display = "block";
                 if (poster) poster.style.display = "none";
-                video.play().then(() => {
-                    card.classList.add("playing");
-                }).catch(() => {});
+                video.play()
+                    .then(() => item.classList.add("playing"))
+                    .catch(() => {
+                        video.style.display = "none";
+                        if (poster) poster.style.display = "block";
+                        item.classList.remove("playing");
+                    });
             } else if (!entry.isIntersecting) {
                 video.pause();
-                card.classList.remove("playing");
+                item.classList.remove("playing");
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.4 });
 
-    videoCards.forEach(card => playObserver.observe(card));
+    phoneItems.forEach(item => playObserver.observe(item));
 </script>
-
 </body>
 </html>
