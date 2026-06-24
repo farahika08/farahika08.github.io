@@ -218,7 +218,8 @@
             background: #1a1a1a;
             overflow: hidden;
         }
-        .video-thumb img {
+        .video-thumb img,
+        .video-thumb video {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -226,9 +227,23 @@
             object-fit: cover;
             transition: transform 0.4s ease, opacity 0.3s ease;
         }
-        .video-card:hover .video-thumb img {
+        .video-card:hover .video-thumb img,
+        .video-card:hover .video-thumb video {
             transform: scale(1.05);
             opacity: 0.85;
+        }
+        /* Hide play button once video is playing */
+        .video-card.playing .play-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Prevent black flash before video loads */
+        .video-thumb video {
+            background: #111;
+        }
+        /* Keep play button visible until playing */
+        .video-card:not(.playing) .play-btn {
+            opacity: 1;
         }
 
         /* Dark gradient over thumbnail */
@@ -636,16 +651,16 @@
 
             <!-- Video 1 -->
             <div class="video-card">
-    <div class="video-thumb">
-        <span class="platform-badge">TikTok</span>
-        <video class="autoplay-video" src="assets/videos/video1.mp4" muted loop playsinline preload="none"></video>
-        <div class="play-btn"><i class="fas fa-play"></i></div>
-    </div>
-    <div class="video-info">
-        <h4>Your Video Title Here</h4>
-        <p>Category · Platform</p>
-    </div>
-</div>
+                <div class="video-thumb">
+                    <span class="platform-badge">TikTok</span>
+                    <video class="autoplay-video" src="assets/videos/video1.mp4" muted loop playsinline preload="metadata"></video>
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Video Title 1</h4>
+                    <p>Skincare · TikTok</p>
+                </div>
+            </div>
 
             <!-- Video 2 -->
             <div class="video-card" onclick="window.open('[YOUR_VIDEO_2_URL]','_blank')">
@@ -799,23 +814,84 @@
 <script src="assets/js/main.js"></script>
 
 <script>
-    /* ── Scroll-reveal for video cards ── */
     const videoCards = document.querySelectorAll(".video-card");
 
+    /* ── 1. Scroll-reveal: fade cards in as they enter viewport ── */
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 const index = Array.from(videoCards).indexOf(entry.target);
                 const delay = (index % 3) * 100;
-                setTimeout(() => {
-                    entry.target.classList.add("visible");
-                }, delay);
+                setTimeout(() => entry.target.classList.add("visible"), delay);
                 revealObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.15 });
 
-    videoCards.forEach(card => revealObserver.observe(card));
+    /* ── 2. Autoplay: load & play only when scrolled into view ── */
+    const playObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const video = entry.target.querySelector(".autoplay-video");
+            if (!video) return;
+
+            if (entry.isIntersecting) {
+                /* Load the video only when needed */
+                if (!video.src && video.dataset.src) {
+                    video.src = video.dataset.src;
+                }
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        entry.target.classList.add("playing");
+                    }).catch(() => {
+                        /* Autoplay blocked — show play button, let user tap */
+                        entry.target.classList.remove("playing");
+                    });
+                }
+            } else {
+                video.pause();
+                entry.target.classList.remove("playing");
+            }
+        });
+    }, { threshold: 0.3 });
+
+    /* ── 3. Unlock autoplay on first user interaction ── */
+    let unlocked = false;
+    function unlockAutoplay() {
+        if (unlocked) return;
+        unlocked = true;
+        document.querySelectorAll(".autoplay-video").forEach(video => {
+            if (!video.src && video.dataset.src) {
+                video.src = video.dataset.src;
+            }
+            video.play().then(() => {
+                video.closest(".video-card").classList.add("playing");
+            }).catch(() => {});
+            video.pause(); /* pause immediately — playObserver handles actual play */
+        });
+    }
+    document.addEventListener("scroll", unlockAutoplay, { once: true });
+    document.addEventListener("click", unlockAutoplay, { once: true });
+    document.addEventListener("touchstart", unlockAutoplay, { once: true });
+
+    /* ── 4. Click play button manually if autoplay is blocked ── */
+    document.querySelectorAll(".video-card .play-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const video = btn.closest(".video-thumb").querySelector(".autoplay-video");
+            if (video) {
+                if (!video.src && video.dataset.src) video.src = video.dataset.src;
+                video.play().then(() => {
+                    btn.closest(".video-card").classList.add("playing");
+                }).catch(() => {});
+            }
+        });
+    });
+
+    videoCards.forEach(card => {
+        revealObserver.observe(card);
+        playObserver.observe(card);
+    });
 </script>
 
 </body>
