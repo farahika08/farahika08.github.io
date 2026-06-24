@@ -650,10 +650,11 @@
         <div class="video-grid">
 
             <!-- Video 1 -->
-            <div class="video-card">
+            <div class="video-card" data-video="assets/videos/video1.mp4">
                 <div class="video-thumb">
                     <span class="platform-badge">TikTok</span>
-                    <video class="autoplay-video" src="assets/videos/video1.mp4" muted loop playsinline preload="metadata"></video>
+                    <img class="video-poster" src="assets/images/video-thumb-1.jpg" alt="Video 1 thumbnail">
+                    <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
                     <div class="play-btn"><i class="fas fa-play"></i></div>
                 </div>
                 <div class="video-info">
@@ -816,82 +817,74 @@
 <script>
     const videoCards = document.querySelectorAll(".video-card");
 
-    /* ── 1. Scroll-reveal: fade cards in as they enter viewport ── */
+    /* ── Scroll-reveal ── */
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 const index = Array.from(videoCards).indexOf(entry.target);
-                const delay = (index % 3) * 100;
-                setTimeout(() => entry.target.classList.add("visible"), delay);
+                setTimeout(() => entry.target.classList.add("visible"), (index % 3) * 100);
                 revealObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.15 });
 
-    /* ── 2. Autoplay: load & play only when scrolled into view ── */
-    const playObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            const video = entry.target.querySelector(".autoplay-video");
-            if (!video) return;
+    videoCards.forEach(card => revealObserver.observe(card));
 
-            if (entry.isIntersecting) {
-                /* Load the video only when needed */
-                if (!video.src && video.dataset.src) {
-                    video.src = video.dataset.src;
-                }
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        entry.target.classList.add("playing");
-                    }).catch(() => {
-                        /* Autoplay blocked — show play button, let user tap */
-                        entry.target.classList.remove("playing");
-                    });
-                }
+    /* ── Click to play / pause ── */
+    videoCards.forEach(card => {
+        const videoSrc = card.dataset.video;
+        if (!videoSrc) return; // skip thumbnail-only cards
+
+        const video = card.querySelector(".autoplay-video");
+        const poster = card.querySelector(".video-poster");
+        const playBtn = card.querySelector(".play-btn");
+
+        card.addEventListener("click", () => {
+            if (video.style.display === "none") {
+                // First click: load and show video
+                video.src = videoSrc;
+                video.style.display = "block";
+                if (poster) poster.style.display = "none";
+                video.play().then(() => {
+                    card.classList.add("playing");
+                }).catch(err => {
+                    console.log("Play failed:", err);
+                });
+            } else if (video.paused) {
+                video.play();
+                card.classList.add("playing");
             } else {
                 video.pause();
-                entry.target.classList.remove("playing");
+                card.classList.remove("playing");
             }
         });
-    }, { threshold: 0.3 });
 
-    /* ── 3. Unlock autoplay on first user interaction ── */
-    let unlocked = false;
-    function unlockAutoplay() {
-        if (unlocked) return;
-        unlocked = true;
-        document.querySelectorAll(".autoplay-video").forEach(video => {
-            if (!video.src && video.dataset.src) {
-                video.src = video.dataset.src;
-            }
-            video.play().then(() => {
-                video.closest(".video-card").classList.add("playing");
-            }).catch(() => {});
-            video.pause(); /* pause immediately — playObserver handles actual play */
+        // Show/hide play button based on state
+        video.addEventListener("play", () => {
+            playBtn.style.opacity = "0";
         });
-    }
-    document.addEventListener("scroll", unlockAutoplay, { once: true });
-    document.addEventListener("click", unlockAutoplay, { once: true });
-    document.addEventListener("touchstart", unlockAutoplay, { once: true });
-
-    /* ── 4. Click play button manually if autoplay is blocked ── */
-    document.querySelectorAll(".video-card .play-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const video = btn.closest(".video-thumb").querySelector(".autoplay-video");
-            if (video) {
-                if (!video.src && video.dataset.src) video.src = video.dataset.src;
-                video.play().then(() => {
-                    btn.closest(".video-card").classList.add("playing");
-                }).catch(() => {});
-            }
+        video.addEventListener("pause", () => {
+            playBtn.style.opacity = "1";
         });
     });
 
-    videoCards.forEach(card => {
-        revealObserver.observe(card);
-        playObserver.observe(card);
-    });
+    /* ── Scroll autoplay: play when 50% in view, pause when out ── */
+    const playObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const card = entry.target;
+            const video = card.querySelector(".autoplay-video");
+            if (!video || video.style.display === "none") return;
+
+            if (entry.isIntersecting) {
+                video.play().then(() => card.classList.add("playing")).catch(() => {});
+            } else {
+                video.pause();
+                card.classList.remove("playing");
+            }
+        });
+    }, { threshold: 0.5 });
+
+    videoCards.forEach(card => playObserver.observe(card));
 </script>
 
 </body>
