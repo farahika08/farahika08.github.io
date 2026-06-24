@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -256,24 +255,40 @@
             z-index: 5;
         }
 
-        /* Screen inside phone */
+        /* Screen inside phone — exact 9:16 TikTok ratio */
         .phone-screen {
             position: relative;
             width: 100%;
-            padding-top: 177%; /* 9:16 portrait ratio */
+            aspect-ratio: 9 / 16;
             border-radius: 26px;
             overflow: hidden;
             background: #111;
         }
 
+        /* Hide video until loaded, show poster */
+        .phone-screen .autoplay-video {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .phone-item.playing .phone-screen .autoplay-video {
+            opacity: 1;
+        }
+        .phone-item.playing .phone-screen .video-poster {
+            opacity: 0;
+        }
+
         .phone-poster,
-        .phone-video {
+        .phone-video,
+        .phone-screen .video-poster,
+        .phone-screen .autoplay-video {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 26px;
+            object-position: center center;
+            border-radius: 0;
+            display: block;
         }
 
         /* Play button */
@@ -672,7 +687,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-1.jpg" alt="Video 1">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -689,7 +704,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-2.jpg" alt="Video 2">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -706,7 +721,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-3.jpg" alt="Video 3">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -723,7 +738,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-4.jpg" alt="Video 4">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">Shopee</span>
@@ -740,7 +755,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-5.jpg" alt="Video 5">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -757,7 +772,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-6.jpg" alt="Video 6">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">Shopee</span>
@@ -774,7 +789,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-7.jpg" alt="Video 7">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -791,7 +806,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-8.jpg" alt="Video 8">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">TikTok</span>
@@ -808,7 +823,7 @@
                 <div class="phone-frame">
                     <div class="phone-screen">
                         <img class="video-poster" src="assets/images/video-thumb-9.jpg" alt="Video 9">
-                        <video class="autoplay-video" muted loop playsinline preload="none" style="display:none;"></video>
+                        <video class="autoplay-video" muted loop playsinline preload="none"></video>
                         <div class="phone-play-btn"><i class="fas fa-play"></i></div>
                         <button class="phone-unmute-btn" title="Toggle sound"><i class="fas fa-volume-xmark"></i></button>
                         <span class="phone-badge">Shopee</span>
@@ -882,26 +897,24 @@
         const videoSrc = item.dataset.video;
         if (!videoSrc || videoSrc.startsWith('[')) return;
 
-        const video    = item.querySelector(".autoplay-video");
-        const poster   = item.querySelector(".video-poster");
-        const playBtn  = item.querySelector(".phone-play-btn");
+        const video     = item.querySelector(".autoplay-video");
+        const playBtn   = item.querySelector(".phone-play-btn");
         const unmuteBtn = item.querySelector(".phone-unmute-btn");
-
         if (!video) return;
 
         function loadAndPlay() {
-            if (!video.src || video.src === window.location.href) video.src = videoSrc;
-            video.style.display = "block";
-            if (poster) poster.style.display = "none";
+            if (!video.src || video.src === window.location.href) {
+                video.src = videoSrc;
+            }
             return video.play().then(() => {
                 item.classList.add("playing");
             }).catch(() => item.classList.remove("playing"));
         }
 
-        /* Click anywhere on card to play/pause */
+        /* Click card to play/pause */
         item.addEventListener("click", (e) => {
             if (unmuteBtn && unmuteBtn.contains(e.target)) return;
-            if (!video.src || video.src === window.location.href || video.style.display === "none") {
+            if (!video.src || video.src === window.location.href) {
                 loadAndPlay();
             } else if (video.paused) {
                 video.play().then(() => item.classList.add("playing")).catch(() => {});
@@ -926,9 +939,9 @@
         }
     });
 
-    /* ── 3. Auto-play when scrolled into view after first interaction ── */
+    /* ── 3. Auto-play on scroll after first interaction ── */
     let interacted = false;
-    ["scroll","click","touchstart"].forEach(evt =>
+    ["scroll", "click", "touchstart"].forEach(evt =>
         document.addEventListener(evt, () => { interacted = true; }, { once: true, passive: true })
     );
 
@@ -938,21 +951,14 @@
             const videoSrc = item.dataset.video;
             if (!videoSrc || videoSrc.startsWith('[')) return;
 
-            const video  = item.querySelector(".autoplay-video");
-            const poster = item.querySelector(".video-poster");
+            const video = item.querySelector(".autoplay-video");
             if (!video) return;
 
             if (entry.isIntersecting && interacted) {
                 if (!video.src || video.src === window.location.href) video.src = videoSrc;
-                video.style.display = "block";
-                if (poster) poster.style.display = "none";
                 video.play()
                     .then(() => item.classList.add("playing"))
-                    .catch(() => {
-                        video.style.display = "none";
-                        if (poster) poster.style.display = "block";
-                        item.classList.remove("playing");
-                    });
+                    .catch(() => item.classList.remove("playing"));
             } else if (!entry.isIntersecting) {
                 video.pause();
                 item.classList.remove("playing");
