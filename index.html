@@ -304,7 +304,7 @@
         }
 
         /* Play button */
-        .phone-play {
+        .phone-play-btn {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -319,42 +319,45 @@
             z-index: 3;
             transition: opacity 0.2s, transform 0.2s;
         }
-        .phone-play i {
+        .phone-play-btn i {
             color: var(--accent-color, #c9a96e);
             font-size: 1rem;
             margin-left: 3px;
         }
-        .phone-item.playing .phone-play {
+        .phone-item.playing .phone-play-btn {
             opacity: 0;
             pointer-events: none;
         }
 
         /* Unmute button */
-        .phone-unmute {
+        .phone-unmute-btn {
             position: absolute;
-            bottom: 0.6rem;
-            right: 0.6rem;
-            width: 30px;
-            height: 30px;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.5);
-            border: none;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1.5px solid rgba(255,255,255,0.3);
             color: #fff;
-            font-size: 0.7rem;
+            font-size: 0.78rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 4;
+            z-index: 5;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s, background 0.2s;
+            transition: opacity 0.25s ease, background 0.2s ease, transform 0.2s ease;
         }
-        .phone-item.playing .phone-unmute {
+        .phone-item.playing .phone-unmute-btn {
             opacity: 1;
             pointer-events: all;
         }
-        .phone-unmute:hover { background: rgba(0,0,0,0.75); }
+        .phone-unmute-btn:hover {
+            background: rgba(0, 0, 0, 0.85);
+            transform: scale(1.12);
+        }
 
         /* View all CTA */
         .video-cta {
